@@ -3,6 +3,7 @@ package todoapp.backend.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import todoapp.backend.model.ToDo;
 import todoapp.backend.service.ToDoService;
 import todoapp.backend.util.Validators;
 
+@CrossOrigin("*")
 @RestController
 public class ToDoController {
     private final ToDoService toDoService;
