@@ -2,6 +2,7 @@ import { HttpStatusCode } from "axios";
 import { useEffect, useState } from "react";
 import "./App.css";
 import FilterControls from "./components/FilterControls/FilterControls";
+import Paginator from "./components/Paginator/Paginator";
 import ToDoList from "./components/ToDoList/ToDoList";
 import ToDoModalForm from "./components/ToDoModalForm/ToDoModalForm";
 import {
@@ -14,6 +15,7 @@ import {
 } from "./services/ToDoService";
 import type {
   FilterCriteria,
+  PaginationData,
   Status,
   ToDo,
   ToDoCreationData,
@@ -35,15 +37,36 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [initialFormData, setInitialFormData] = useState<ToDo | null>(null);
 
+  // Pagination data
+  const [paginationData, setPaginationData] = useState<PaginationData>({
+    currentPage: 0,
+    size: 5,
+    totalPages: 1,
+    totalElements: 0,
+    first: true,
+    last: false,
+  });
+
+  const [currPage, setCurrPage] = useState(0);
+
   useEffect(() => {
     fetchToDos();
-  }, [filters]); // Re-runs whenever filters change
+  }, [filters, currPage]); // Re-runs whenever filters or current page change
 
   // Fetch all  To Dos
   const fetchToDos = () => {
-    getAllToDos(filters)
+    getAllToDos(filters, currPage, paginationData.size)
       .then((response) => {
-        setToDoList(response?.data);
+        setPaginationData({
+          currentPage: response?.data.number,
+          size: response?.data.size,
+          totalPages: response?.data.totalPages,
+          totalElements: response?.data.totalElements,
+          first: response?.data.first,
+          last: response?.data.last,
+        });
+
+        setToDoList(response?.data.content);
       })
       .catch((error) => {
         console.error(error);
@@ -94,9 +117,18 @@ function App() {
   // Handles the deletion of a To Do given its ID
   const handleDeleteToDoClick = (id: number) => {
     deleteToDo(id).then((response) => {
-      // if delete is successful, refetch To Dos
+      // if delete is successful, refetch ToDos considering pagination
       if (response!!.status === HttpStatusCode.Ok) {
-        fetchToDos();
+        // if we deleted the last ToDo of the last page, go to previous page
+        if (
+          toDoList.length === 1 &&
+          paginationData.last &&
+          !paginationData.first
+        ) {
+          setCurrPage(currPage - 1);
+        } else {
+          fetchToDos(); // otherwise, fetch ToDos normally
+        }
       } else {
         console.log(response!!.data);
       }
@@ -114,6 +146,11 @@ function App() {
     // close modal and reset initialFormData
     setIsModalOpen(false);
     setInitialFormData(null);
+  };
+
+  // handles pagination
+  const handlePagination = (targetPage: number) => {
+    setCurrPage(targetPage);
   };
 
   return (
@@ -141,6 +178,10 @@ function App() {
           onEditClick={handleEditToDoClick}
           onDeleteClick={handleDeleteToDoClick}
           onDoneStatusChange={handleDoneStatusChange}
+        />
+        <Paginator
+          pagination={paginationData}
+          onPageChange={handlePagination}
         />
       </main>
     </>

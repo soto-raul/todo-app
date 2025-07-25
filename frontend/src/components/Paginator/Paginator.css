@@ -1,0 +1,28 @@
+.paginator {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 1px;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+.paginator-item {
+  width: 24px;
+  height: 24px;
+  font-size: 1.1rem;
+  font-weight: 300;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.paginator-item:not(.page-num):hover {
+  background-color: gray;
+  cursor: pointer;
+}
+
+.page-num {
+  border: 1px solid gray;
+}

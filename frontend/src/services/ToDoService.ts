@@ -6,9 +6,15 @@ const API_BASE_URL = "http://localhost:9090/todos";
 const instance = axios.create({ baseURL: API_BASE_URL, timeout: 2000 });
 
 // GET("/todos")
-export const getAllToDos = async (filters: FilterCriteria) => {
+export const getAllToDos = async (
+  filters: FilterCriteria,
+  page: number,
+  size: number
+) => {
   try {
-    const response = await instance.get(API_BASE_URL, { params: filters });
+    const response = await instance.get(API_BASE_URL, {
+      params: { ...filters, page: page, size: size },
+    });
     return response;
   } catch (error) {
     console.error(error);
