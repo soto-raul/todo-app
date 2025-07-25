@@ -38,11 +38,11 @@ public class ToDoController {
     @GetMapping("/todos")
     public ResponseEntity<?> getAllToDos(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) Priority[] priority,
+            @RequestParam(required = false) Priority priority,
             @RequestParam(required = false) Status doneStatus) {
 
         // Call getAll if there's no filters or getByCriteria if there's at least 1
-        if (!Validators.validateAllCriteriaNotNull(name, priority, doneStatus)) {
+        if (Validators.validateAllCriteriaAreNull(name, priority, doneStatus)) {
             return ResponseEntity.ok(toDoService.getAllToDos());
         } else {
             return ResponseEntity.ok(toDoService.getByCriteria(new FilterCriteria(name, priority, doneStatus)));
