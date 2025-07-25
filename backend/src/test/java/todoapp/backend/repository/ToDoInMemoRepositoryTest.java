@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +29,9 @@ class ToDoInMemoRepositoryTest {
     @BeforeEach
     void init() {
         toDoRepository = new ToDoInMemoRepository();
-        toDo1 = new ToDo(1, "Test API", LocalDateTime.of(2025, 8, 4, 12, 30), Priority.HIGH);
+        toDo1 = new ToDo(1, "Test API", LocalDate.of(2025, 8, 4), Priority.HIGH);
         toDo2 = new ToDo(2, "Write API documentation", null, Priority.LOW);
-        toDo3 = new ToDo(3, "Finish essay", LocalDateTime.of(2025, 7, 18, 15, 00), Priority.MEDIUM);
+        toDo3 = new ToDo(3, "Finish essay", LocalDate.of(2025, 7, 18), Priority.MEDIUM);
         toDoRepository.add(toDo1);
         toDoRepository.add(toDo2);
         toDoRepository.add(toDo3);
@@ -69,14 +69,13 @@ class ToDoInMemoRepositoryTest {
     @Test
     void testFindByPriority() {
         FilterCriteria criteria = new FilterCriteria();
-        criteria.setPriorities(new Priority[] { Priority.HIGH, Priority.MEDIUM });
+        criteria.setPriority(Priority.HIGH);
 
         List<ToDo> filteredToDos = toDoRepository.findAllByCriteria(criteria);
 
         // Assertions
-        assertEquals(2, filteredToDos.size());
+        assertEquals(1, filteredToDos.size());
         assertTrue(filteredToDos.contains(toDo1));
-        assertTrue(filteredToDos.contains(toDo3));
     }
 
     @Test
@@ -98,7 +97,7 @@ class ToDoInMemoRepositoryTest {
     void testFindByMultipleFilters() {
         FilterCriteria criteria = new FilterCriteria();
         criteria.setName("essay");
-        criteria.setPriorities(new Priority[] { Priority.MEDIUM });
+        criteria.setPriority(Priority.MEDIUM);
         criteria.setDoneStatus(Status.NOT_DONE);
 
         List<ToDo> filteredToDos = toDoRepository.findAllByCriteria(criteria);
@@ -126,7 +125,7 @@ class ToDoInMemoRepositoryTest {
         ToDo existingToDo = toDo3;
 
         existingToDo.setName("Updated ToDo Name");
-        existingToDo.setDueDate(LocalDateTime.of(2025, 7, 20, 10, 00));
+        existingToDo.setDueDate(LocalDate.of(2025, 7, 20));
         existingToDo.setPriority(Priority.LOW);
 
         ToDo updatedToDo = toDoRepository.update(3, existingToDo);
