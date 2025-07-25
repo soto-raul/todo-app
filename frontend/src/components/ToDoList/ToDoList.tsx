@@ -12,6 +12,27 @@ const ToDoList = ({
   onDeleteClick: (id: number) => void;
   onDoneStatusChange: (id: number, newStatus: Status) => void;
 }) => {
+  if (toDos.length === 0) {
+    return (
+      <section>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th className="done-col"></th>
+                <th className="name-col">Name</th>
+                <th className="priority-col">Priority</th>
+                <th className="due-date-col">Due Date</th>
+                <th className="actions-col"></th>
+              </tr>
+            </thead>
+          </table>
+          <div className="no-todos-msg">No To Do tasks were found</div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section>
       <div>

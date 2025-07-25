@@ -23,3 +23,12 @@ export interface FilterCriteria {
 export type Status = "DONE" | "NOT_DONE";
 
 export type Priority = "HIGH" | "MEDIUM" | "LOW";
+
+export interface PaginationData {
+  currentPage: number;
+  size: number;
+  totalPages: number;
+  totalElements: number;
+  first: boolean;
+  last: boolean;
+}

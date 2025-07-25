@@ -4,6 +4,7 @@ import {
   type Priority,
   type Status,
 } from "../../shared/types";
+import { isNameValid } from "../../shared/validators";
 import "./filterControls.css";
 
 const FilterControls = ({
@@ -20,7 +21,7 @@ const FilterControls = ({
   const handleSearchClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setFilters({
-      name: nameFilter === "" ? null : nameFilter,
+      name: !isNameValid(nameFilter) ? null : nameFilter,
       priority: priorityFilter === "ALL" ? null : (priorityFilter as Priority),
       doneStatus:
         doneStatusFilter === "ALL" ? null : (doneStatusFilter as Status),
