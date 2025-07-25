@@ -1,7 +1,6 @@
 package todoapp.backend.repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,11 +58,11 @@ public class ToDoInMemoRepository implements ToDoRepository {
     private boolean matchesCriteria(ToDo toDo, FilterCriteria criteria) {
         // Check if To Do matches criteria one by one. Whenever a criteria is
         // null, the filter is not applied, so we return the match as true.
-        boolean matchesName = criteria.getName() != null
+        boolean matchesName = criteria.getName() == null
                 || toDo.getName().toLowerCase().contains(criteria.getName().toLowerCase());
 
-        boolean matchesPriority = criteria.getPriorities() == null
-                || Arrays.asList(criteria.getPriorities()).contains(toDo.getPriority());
+        boolean matchesPriority = criteria.getPriority() == null
+                || criteria.getPriority() == toDo.getPriority();
 
         boolean matchesDoneStatus = criteria.getDoneStatus() == null || criteria.getDoneStatus() == toDo.getIsDone();
 
