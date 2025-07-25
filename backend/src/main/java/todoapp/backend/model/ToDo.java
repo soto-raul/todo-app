@@ -1,5 +1,6 @@
 package todoapp.backend.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,7 +28,7 @@ public class ToDo {
     @JsonProperty("dueDate")
     @Getter
     @Setter
-    private LocalDateTime dueDate; // Optional field, nullable
+    private LocalDate dueDate; // Optional field, nullable
 
     @JsonProperty("isDone")
     @Getter
@@ -53,7 +54,7 @@ public class ToDo {
         this.creationDate = LocalDateTime.now();
     }
 
-    public ToDo(int id, String name, LocalDateTime dueDate, Priority priority) {
+    public ToDo(int id, String name, LocalDate dueDate, Priority priority) {
         this.id = id;
         this.name = name;
         this.dueDate = dueDate;
