@@ -10,7 +10,7 @@ import todoapp.backend.enums.Status;
 public class FilterCriteria {
     // All can be null, which means there is no filtering by that criteria
     private String name;
-    private Priority[] priorities;
+    private Priority priority;
     private Status doneStatus;
 
     // Default constructor
@@ -18,9 +18,9 @@ public class FilterCriteria {
 
     }
 
-    public FilterCriteria(String name, Priority[] priorities, Status doneStatus) {
+    public FilterCriteria(String name, Priority priority, Status doneStatus) {
         this.name = name;
-        this.priorities = priorities;
+        this.priority = priority;
         this.doneStatus = doneStatus;
     }
 }
