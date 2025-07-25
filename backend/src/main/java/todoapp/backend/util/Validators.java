@@ -31,7 +31,7 @@ public final class Validators {
         return name != null && !name.isBlank() && name.length() <= 120;
     }
 
-    public static boolean validateAllCriteriaNotNull(String name, Priority[] priorities, Status doneStatus) {
-        return validateToDoName(name) && (priorities != null && priorities.length > 0) && doneStatus != null;
+    public static boolean validateAllCriteriaAreNull(String name, Priority priority, Status doneStatus) {
+        return name == null && priority == null && doneStatus == null;
     }
 }
