@@ -1,5 +1,7 @@
 package todoapp.backend.controller;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -39,15 +41,18 @@ public class ToDoController {
     public ResponseEntity<?> getAllToDos(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Priority priority,
-            @RequestParam(required = false) Status doneStatus) {
+            @RequestParam(required = false) Status doneStatus,
+            @RequestParam(required = true, defaultValue = "0") int page,
+            @RequestParam(required = true, defaultValue = "10") int size) {
 
+        Pageable pageReq = PageRequest.of(page, size);
         // Call getAll if there's no filters or getByCriteria if there's at least 1
         if (Validators.validateAllCriteriaAreNull(name, priority, doneStatus)) {
-            return ResponseEntity.ok(toDoService.getAllToDos());
+            return ResponseEntity.ok(toDoService.getAllToDos(pageReq));
         } else {
-            return ResponseEntity.ok(toDoService.getByCriteria(new FilterCriteria(name, priority, doneStatus)));
+            return ResponseEntity
+                    .ok(toDoService.getByCriteria(new FilterCriteria(name, priority, doneStatus), pageReq));
         }
-
     }
 
     @PostMapping("/todos")

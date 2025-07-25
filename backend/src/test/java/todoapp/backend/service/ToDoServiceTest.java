@@ -18,6 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import todoapp.backend.enums.Priority;
 import todoapp.backend.enums.Status;
@@ -51,7 +53,8 @@ public class ToDoServiceTest {
     void testGetAllToDos() {
         when(toDoRepository.findAll()).thenReturn(List.of(toDo1, toDo2, toDo3));
 
-        List<ToDo> allToDos = toDoService.getAllToDos();
+        Pageable pageReq = PageRequest.of(0, 10);
+        List<ToDo> allToDos = toDoService.getAllToDos(pageReq).getContent();
 
         // Assertions
         assertNotNull(allToDos);
@@ -64,7 +67,8 @@ public class ToDoServiceTest {
         FilterCriteria criteria = new FilterCriteria("API", null, null);
         when(toDoRepository.findAllByCriteria(criteria)).thenReturn(List.of(toDo1, toDo2));
 
-        List<ToDo> toDosByName = toDoService.getByCriteria(criteria);
+        Pageable pageReq = PageRequest.of(0, 10);
+        List<ToDo> toDosByName = toDoService.getByCriteria(criteria, pageReq).getContent();
 
         // Assertions
         assertNotNull(toDosByName);
@@ -78,7 +82,8 @@ public class ToDoServiceTest {
 
         when(toDoRepository.findAllByCriteria(criteria)).thenReturn(List.of(toDo3));
 
-        List<ToDo> toDosByPriority = toDoService.getByCriteria(criteria);
+        Pageable pageReq = PageRequest.of(0, 10);
+        List<ToDo> toDosByPriority = toDoService.getByCriteria(criteria, pageReq).getContent();
 
         // Assertions
         assertNotNull(toDosByPriority);
@@ -92,7 +97,8 @@ public class ToDoServiceTest {
 
         when(toDoRepository.findAllByCriteria(criteria)).thenReturn(List.of(toDo3));
 
-        List<ToDo> toDosByStatus = toDoService.getByCriteria(criteria);
+        Pageable pageReq = PageRequest.of(0, 10);
+        List<ToDo> toDosByStatus = toDoService.getByCriteria(criteria, pageReq).getContent();
 
         // Assertions
         assertNotNull(toDosByStatus);
@@ -106,7 +112,8 @@ public class ToDoServiceTest {
 
         when(toDoRepository.findAllByCriteria(criteria)).thenReturn(List.of(toDo3));
 
-        List<ToDo> toDosByMultiCriteria = toDoService.getByCriteria(criteria);
+        Pageable pageReq = PageRequest.of(0, 10);
+        List<ToDo> toDosByMultiCriteria = toDoService.getByCriteria(criteria, pageReq).getContent();
 
         // Assertions
         assertNotNull(toDosByMultiCriteria);

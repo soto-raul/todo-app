@@ -2,6 +2,9 @@ package todoapp.backend.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import todoapp.backend.enums.Status;
@@ -23,12 +26,13 @@ public class ToDoService {
         nextId = 1;
     }
 
-    public List<ToDo> getAllToDos() {
-        return toDoInMemoRepository.findAll();
+    public Page<ToDo> getAllToDos(Pageable pageReq) {
+        return getPageContent(toDoInMemoRepository.findAll(), pageReq);
+
     }
 
-    public List<ToDo> getByCriteria(FilterCriteria filterCriteria) {
-        return toDoInMemoRepository.findAllByCriteria(filterCriteria);
+    public Page<ToDo> getByCriteria(FilterCriteria filterCriteria, Pageable pageReq) {
+        return getPageContent(toDoInMemoRepository.findAllByCriteria(filterCriteria), pageReq);
     }
 
     public ToDo addToDo(ToDo toDo) {
@@ -91,5 +95,15 @@ public class ToDoService {
             throw new ToDoNotFoundException("No ToDo matching ID '" + id + "' was found.");
         }
         return wasDeleted;
+    }
+
+    private Page<ToDo> getPageContent(List<ToDo> allToDos, Pageable pageReq) {
+        // get start and end of our list slice
+        int start = (int) pageReq.getOffset();
+        int end = Math.min((start + pageReq.getPageSize()), allToDos.size());
+
+        // get sublist
+        List<ToDo> pageContent = allToDos.subList(start, end);
+        return new PageImpl<>(pageContent, pageReq, allToDos.size());
     }
 }
