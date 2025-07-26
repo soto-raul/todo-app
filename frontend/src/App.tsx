@@ -40,9 +40,8 @@ function App() {
   // Pagination data
   const [paginationData, setPaginationData] = useState<PaginationData>({
     currentPage: 0,
-    size: 5,
+    size: 10,
     totalPages: 1,
-    totalElements: 0,
     first: true,
     last: false,
   });
@@ -61,7 +60,6 @@ function App() {
           currentPage: response?.data.number,
           size: response?.data.size,
           totalPages: response?.data.totalPages,
-          totalElements: response?.data.totalElements,
           first: response?.data.first,
           last: response?.data.last,
         });
