@@ -16,6 +16,7 @@ import {
 import type {
   FilterCriteria,
   PaginationData,
+  SortingOrder,
   Status,
   ToDo,
   ToDoCreationData,
@@ -48,13 +49,21 @@ function App() {
 
   const [currPage, setCurrPage] = useState(0);
 
+  // Sorting criteria
+  const [sortingCriteria, setSortingCriteria] = useState<
+    Map<string, SortingOrder>
+  >(new Map<string, SortingOrder>());
+
   useEffect(() => {
     fetchToDos();
   }, [filters, currPage]); // Re-runs whenever filters or current page change
 
   // Fetch all  To Dos
   const fetchToDos = () => {
-    getAllToDos(filters, currPage, paginationData.size)
+    const sortBy = Array.from(sortingCriteria.keys()).join(",");
+    const order = Array.from(sortingCriteria.values()).join(",");
+
+    getAllToDos(filters, currPage, paginationData.size, sortBy, order)
       .then((response) => {
         setPaginationData({
           currentPage: response?.data.number,
@@ -151,6 +160,17 @@ function App() {
     setCurrPage(targetPage);
   };
 
+  // handle sorting
+  const handleSortingChange = (
+    newSortingCriteria: Map<string, SortingOrder>
+  ) => {
+    // update sorting criteria
+    setSortingCriteria(newSortingCriteria);
+
+    // refetch To Do list
+    fetchToDos();
+  };
+
   return (
     <>
       <main>
@@ -173,9 +193,11 @@ function App() {
         </section>
         <ToDoList
           toDos={toDoList}
+          currSorting={sortingCriteria}
           onEditClick={handleEditToDoClick}
           onDeleteClick={handleDeleteToDoClick}
           onDoneStatusChange={handleDoneStatusChange}
+          onSortingChange={handleSortingChange}
         />
         <Paginator
           pagination={paginationData}

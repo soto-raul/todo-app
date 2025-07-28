@@ -9,11 +9,19 @@ const instance = axios.create({ baseURL: API_BASE_URL, timeout: 2000 });
 export const getAllToDos = async (
   filters: FilterCriteria,
   page: number,
-  size: number
+  size: number,
+  sortBy: string,
+  order: string
 ) => {
   try {
     const response = await instance.get(API_BASE_URL, {
-      params: { ...filters, page: page, size: size },
+      params: {
+        ...filters,
+        page: page,
+        size: size,
+        sortBy: sortBy,
+        order: order,
+      },
     });
     return response;
   } catch (error) {
