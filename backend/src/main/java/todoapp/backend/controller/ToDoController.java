@@ -2,6 +2,7 @@ package todoapp.backend.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -105,6 +106,13 @@ public class ToDoController {
         }
 
         return ResponseEntity.ok(updatedToDo);
+    }
+
+    @GetMapping("/todos/metrics")
+    public ResponseEntity<?> getMetrics() {
+        Map<String, Double> metrics = toDoService.getMetrics();
+
+        return ResponseEntity.ok(metrics);
     }
 
     @PutMapping("/todos/{id}/undone")
