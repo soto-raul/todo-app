@@ -21,7 +21,7 @@ import type {
   ToDo,
   ToDoCreationData,
 } from "./shared/types";
-import { isToDo } from "./shared/validators";
+import { anyFiltersApplied, isToDo } from "./shared/validators";
 
 function App() {
   // ToDo tasks list
@@ -55,7 +55,12 @@ function App() {
   >(new Map<string, SortingOrder>());
 
   useEffect(() => {
-    fetchToDos();
+    // if there are any filters applied and we're not in the first page of the list, first reset pagination
+    if (anyFiltersApplied(filters) && currPage !== 0) {
+      setCurrPage(0);
+    } else {
+      fetchToDos();
+    }
   }, [filters, currPage]); // Re-runs whenever filters or current page change
 
   // Fetch all  To Dos
