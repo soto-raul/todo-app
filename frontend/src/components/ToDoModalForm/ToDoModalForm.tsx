@@ -22,7 +22,7 @@ const ToDoForm = ({
   };
 
   // min dueDate value = today
-  const today = new Date().toISOString().substr(0, 10);
+  const today = new Date().toISOString().substring(0, 10);
 
   // validity of name input
   const [nameIsValid, setNameIsValid] = useState(false);
