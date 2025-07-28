@@ -1,7 +1,12 @@
 package todoapp.backend.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -39,13 +44,29 @@ public class ToDoController {
     // API ENDPOINTS
     @GetMapping("/todos")
     public ResponseEntity<?> getAllToDos(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) Priority priority,
-            @RequestParam(required = false) Status doneStatus,
-            @RequestParam(required = true, defaultValue = "0") int page,
-            @RequestParam(required = true, defaultValue = "10") int size) {
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "priority", required = false) Priority priority,
+            @RequestParam(value = "doneStatus", required = false) Status doneStatus,
+            @RequestParam(value = "page", required = true, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = true, defaultValue = "10") int size,
+            @RequestParam(value = "sortBy", required = false) String[] sortBy,
+            @RequestParam(value = "order", required = false) String[] order) {
+        // Init page request and add sorting if necessary
+        Pageable pageReq;
 
-        Pageable pageReq = PageRequest.of(page, size);
+        if (sortBy != null && order != null) {
+            // define sorting criteria
+            List<Sort.Order> sortingCriteria = new ArrayList<>();
+
+            for (int i = 0; i < order.length; i++) {
+                sortingCriteria.add(new Sort.Order(Direction.valueOf(order[i]), sortBy[i]).ignoreCase().nullsLast());
+            }
+
+            pageReq = PageRequest.of(page, size, Sort.by(sortingCriteria));
+        } else {
+            pageReq = PageRequest.of(page, size);
+        }
+
         // Call getAll if there's no filters or getByCriteria if there's at least 1
         if (Validators.validateAllCriteriaAreNull(name, priority, doneStatus)) {
             return ResponseEntity.ok(toDoService.getAllToDos(pageReq));

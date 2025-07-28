@@ -1,10 +1,15 @@
 package todoapp.backend.service;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import todoapp.backend.enums.Status;
@@ -21,18 +26,38 @@ public class ToDoService {
     private final ToDoInMemoRepository toDoInMemoRepository;
     private int nextId;
 
+    // Comparators map
+    Map<String, Comparator<ToDo>> comparators;
+
     public ToDoService(ToDoInMemoRepository toDoInMemoRepository) {
         this.toDoInMemoRepository = toDoInMemoRepository;
         nextId = 1;
+        comparators = new HashMap<>();
+        comparators.put("dueDate", Comparator.comparing(ToDo::getDueDate));
+        comparators.put("priority", Comparator.comparing(ToDo::getPriority));
     }
 
     public Page<ToDo> getAllToDos(Pageable pageReq) {
-        return getPageContent(toDoInMemoRepository.findAll(), pageReq);
+        List<ToDo> allToDos = toDoInMemoRepository.findAll();
+
+        // sort if necessary
+        if (pageReq.getSort() != null) {
+            Collections.sort(allToDos, getComparator(pageReq.getSort()));
+        }
+
+        return getPageContent(allToDos, pageReq);
 
     }
 
     public Page<ToDo> getByCriteria(FilterCriteria filterCriteria, Pageable pageReq) {
-        return getPageContent(toDoInMemoRepository.findAllByCriteria(filterCriteria), pageReq);
+        List<ToDo> allToDos = toDoInMemoRepository.findAllByCriteria(filterCriteria);
+
+        // sort if necessary
+        if (pageReq.getSort() != null) {
+            Collections.sort(allToDos, getComparator(pageReq.getSort()));
+        }
+
+        return getPageContent(allToDos, pageReq);
     }
 
     public ToDo addToDo(ToDo toDo) {
@@ -105,5 +130,14 @@ public class ToDoService {
         // get sublist
         List<ToDo> pageContent = allToDos.subList(start, end);
         return new PageImpl<>(pageContent, pageReq, allToDos.size());
+    }
+
+    private Comparator<ToDo> getComparator(Sort sortOrders) {
+        Comparator<ToDo> fullComparator = sortOrders.stream()
+                .map(order -> (order.getDirection() == Sort.Direction.ASC) ? comparators.get(order.getProperty())
+                        : comparators.get(order.getProperty()).reversed())
+                .reduce(Comparator::thenComparing).orElse((toDo1, toDo2) -> 0);
+
+        return fullComparator;
     }
 }
