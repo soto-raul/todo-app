@@ -31,3 +31,5 @@ export interface PaginationData {
   first: boolean;
   last: boolean;
 }
+
+export type SortingOrder = "ASC" | "DESC";

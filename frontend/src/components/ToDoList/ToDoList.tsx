@@ -1,17 +1,33 @@
-import type { Status, ToDo } from "../../shared/types";
+import type { SortingOrder, Status, ToDo } from "../../shared/types";
 import "./toDoList.css";
 
 const ToDoList = ({
   toDos,
+  currSorting,
   onEditClick,
   onDeleteClick,
   onDoneStatusChange,
+  onSortingChange,
 }: {
   toDos: ToDo[];
+  currSorting: Map<string, SortingOrder>;
   onEditClick: (toDo: ToDo) => void;
   onDeleteClick: (id: number) => void;
   onDoneStatusChange: (id: number, newStatus: Status) => void;
+  onSortingChange: (newSorting: Map<string, SortingOrder>) => void;
 }) => {
+  // handle column header click to change sorting criteria
+  const handleSortByClick = (sortBy: string) => {
+    const newSortingCriteria = currSorting;
+
+    newSortingCriteria.set(
+      sortBy,
+      currSorting.get(sortBy) === "DESC" ? "ASC" : "DESC"
+    );
+
+    onSortingChange(newSortingCriteria);
+  };
+
   if (toDos.length === 0) {
     return (
       <section>
@@ -41,8 +57,22 @@ const ToDoList = ({
             <tr>
               <th className="done-col"></th>
               <th className="name-col">Name</th>
-              <th className="priority-col">Priority</th>
-              <th className="due-date-col">Due Date</th>
+              <th
+                className="priority-col"
+                onClick={() => {
+                  handleSortByClick("priority");
+                }}
+              >
+                Priority
+              </th>
+              <th
+                className="due-date-col"
+                onClick={() => {
+                  handleSortByClick("dueDate");
+                }}
+              >
+                Due Date
+              </th>
               <th className="actions-col"></th>
             </tr>
           </thead>
