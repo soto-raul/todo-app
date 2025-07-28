@@ -33,8 +33,10 @@ public class ToDoService {
         this.toDoInMemoRepository = toDoInMemoRepository;
         nextId = 1;
         comparators = new HashMap<>();
-        comparators.put("dueDate", Comparator.comparing(ToDo::getDueDate));
-        comparators.put("priority", Comparator.comparing(ToDo::getPriority));
+        comparators.put("dueDate",
+                Comparator.comparing(ToDo::getDueDate, Comparator.nullsLast(Comparator.naturalOrder())));
+        comparators.put("priority",
+                Comparator.comparing(ToDo::getPriority, Comparator.nullsLast(Comparator.naturalOrder())));
     }
 
     public Page<ToDo> getAllToDos(Pageable pageReq) {
@@ -138,6 +140,6 @@ public class ToDoService {
                         : comparators.get(order.getProperty()).reversed())
                 .reduce(Comparator::thenComparing).orElse((toDo1, toDo2) -> 0);
 
-        return fullComparator;
+        return Comparator.nullsLast(fullComparator);
     }
 }
