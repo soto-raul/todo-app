@@ -83,3 +83,13 @@ export const deleteToDo = async (toDoId: number) => {
     console.error(error);
   }
 };
+
+// GET("/todos/metrics")
+export const getMetrics = async () => {
+  try {
+    const response = await instance.get(API_BASE_URL + "/metrics");
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};

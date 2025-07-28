@@ -2,6 +2,7 @@ import { HttpStatusCode } from "axios";
 import { useEffect, useState } from "react";
 import "./App.css";
 import FilterControls from "./components/FilterControls/FilterControls";
+import MetricsDashboard from "./components/MetricsDashboard/MetricsDashboard";
 import Paginator from "./components/Paginator/Paginator";
 import ToDoList from "./components/ToDoList/ToDoList";
 import ToDoModalForm from "./components/ToDoModalForm/ToDoModalForm";
@@ -9,6 +10,7 @@ import {
   addToDo,
   deleteToDo,
   getAllToDos,
+  getMetrics,
   markAsDone,
   markAsUndone,
   updateToDo,
@@ -54,6 +56,11 @@ function App() {
     Map<string, SortingOrder>
   >(new Map<string, SortingOrder>());
 
+  // Metrics
+  const [metrics, setMetrics] = useState<Map<string, number>>(
+    new Map<string, number>()
+  );
+
   useEffect(() => {
     fetchToDos();
   }, [filters, currPage]); // Re-runs whenever filters or current page change
@@ -94,6 +101,10 @@ function App() {
     promise.then((response) => {
       if (response?.status === HttpStatusCode.Ok) {
         fetchToDos();
+
+        if (isToDo(formData)) {
+          handleUpdateMetrics();
+        }
       } else {
         console.error(response?.data);
       }
@@ -108,6 +119,7 @@ function App() {
       .then((response) => {
         if (response?.status === HttpStatusCode.Ok) {
           fetchToDos();
+          handleUpdateMetrics();
         }
       })
       .catch((error) => {
@@ -171,6 +183,17 @@ function App() {
     fetchToDos();
   };
 
+  // handles updating metrics
+  const handleUpdateMetrics = () => {
+    getMetrics()
+      .then((response) => {
+        setMetrics(new Map(Object.entries(response?.data)));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <>
       <main>
@@ -203,6 +226,7 @@ function App() {
           pagination={paginationData}
           onPageChange={handlePagination}
         />
+        <MetricsDashboard metricsData={metrics} />
       </main>
     </>
   );
