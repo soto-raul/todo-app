@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -122,6 +123,28 @@ public class ToDoService {
             throw new ToDoNotFoundException("No ToDo matching ID '" + id + "' was found.");
         }
         return wasDeleted;
+    }
+
+    public Map<String, Double> getMetrics() {
+        // get all completed To Dos
+        List<ToDo> allCompleted = toDoInMemoRepository.findAll().stream()
+                .filter(toDo -> (toDo.getIsDone() == Status.DONE))
+                .collect(Collectors.toList());
+
+        Double avgAll = allCompleted.stream()
+                .collect(Collectors.averagingDouble(toDo -> toDo.getCompletionTime().toSeconds()));
+
+        // average completion time grouped by priority
+        Map<String, Double> avgGrouped = allCompleted.stream()
+                .collect(Collectors.groupingBy(toDo -> toDo.getPriority().toString(),
+                        Collectors.averagingDouble(toDo -> toDo.getCompletionTime().toSeconds())));
+
+        // merge all results into 1 map
+        Map<String, Double> metrics = new HashMap<String, Double>();
+        metrics.put("ALL", avgAll);
+        metrics.putAll(avgGrouped);
+
+        return metrics;
     }
 
     private Page<ToDo> getPageContent(List<ToDo> allToDos, Pageable pageReq) {

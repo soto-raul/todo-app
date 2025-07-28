@@ -1,5 +1,6 @@
 package todoapp.backend.model;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -81,5 +82,11 @@ public class ToDo {
             // Reset done date when marked as not done
             this.doneDate = null;
         }
+    }
+
+    // Computed property completionTime
+    public Duration getCompletionTime() {
+        return isDone == Status.DONE ? Duration.between(creationDate, doneDate)
+                : Duration.between(creationDate, LocalDateTime.now());
     }
 }
