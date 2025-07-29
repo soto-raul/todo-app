@@ -207,12 +207,13 @@ function App() {
           >
             + New Task
           </button>
-          <ToDoModalForm
-            isOpen={isModalOpen}
-            initialData={initialFormData}
-            onCancel={handleCloseFormModal}
-            onSave={handleFormSubmission}
-          />
+          {isModalOpen && (
+            <ToDoModalForm
+              initialData={initialFormData}
+              onCancel={handleCloseFormModal}
+              onSave={handleFormSubmission}
+            />
+          )}
         </section>
         <ToDoList
           toDos={toDoList}

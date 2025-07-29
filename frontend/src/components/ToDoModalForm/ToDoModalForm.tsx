@@ -4,12 +4,10 @@ import { isNameValid } from "../../shared/validators";
 import "./ToDoModalForm.css";
 
 const ToDoForm = ({
-  isOpen,
   initialData,
   onCancel,
   onSave,
 }: {
-  isOpen: boolean;
   initialData: ToDo | null;
   onCancel: () => void;
   onSave: (formData: ToDoCreationData | ToDo) => void;
@@ -28,23 +26,20 @@ const ToDoForm = ({
   const [nameIsValid, setNameIsValid] = useState(false);
 
   // form input data state
-  const [formInputs, setFormInputs] = useState(defaultInputs);
+  const [formInputs, setFormInputs] = useState(
+    initialData === null
+      ? defaultInputs
+      : {
+          name: initialData.name,
+          dueDate:
+            initialData.dueDate === null ? "" : initialData.dueDate.toString(),
+          priority: initialData.priority as string,
+        }
+  );
 
   useEffect(() => {
-    setFormInputs(
-      initialData === null
-        ? defaultInputs
-        : {
-            name: initialData.name,
-            dueDate:
-              initialData.dueDate === null
-                ? ""
-                : initialData.dueDate.toString(),
-            priority: initialData.priority as string,
-          }
-    );
     setNameIsValid(isNameValid(formInputs.name)); // check name validity
-  }, [initialData]);
+  }, []);
 
   // handle form submission
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -71,10 +66,6 @@ const ToDoForm = ({
       onSave(updatedToDo);
     }
   };
-
-  if (!isOpen) {
-    return null; // do not render if it should not be visible
-  }
 
   return (
     <div className="modal-overlay">
