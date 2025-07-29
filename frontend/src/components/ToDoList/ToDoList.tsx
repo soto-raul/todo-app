@@ -37,8 +37,8 @@ const ToDoList = ({
               <tr>
                 <th className="done-col"></th>
                 <th className="name-col">Name</th>
-                <th className="priority-col">Priority</th>
-                <th className="due-date-col">Due Date</th>
+                <th className="priority-col">Priority &#8693;</th>
+                <th className="due-date-col">Due Date &#8693;</th>
                 <th className="actions-col"></th>
               </tr>
             </thead>
@@ -63,7 +63,7 @@ const ToDoList = ({
                   handleSortByClick("priority");
                 }}
               >
-                Priority
+                Priority &#8693;
               </th>
               <th
                 className="due-date-col"
@@ -71,7 +71,7 @@ const ToDoList = ({
                   handleSortByClick("dueDate");
                 }}
               >
-                Due Date
+                Due Date &#8693;
               </th>
               <th className="actions-col"></th>
             </tr>
