@@ -1,5 +1,6 @@
 package todoapp.backend.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class ToDoService {
     }
 
     public Page<ToDo> getAllToDos(Pageable pageReq) {
-        List<ToDo> allToDos = toDoInMemoRepository.findAll();
+        List<ToDo> allToDos = new ArrayList<>(toDoInMemoRepository.findAll());
 
         // sort if necessary
         if (pageReq.getSort() != null) {
@@ -53,7 +54,7 @@ public class ToDoService {
     }
 
     public Page<ToDo> getByCriteria(FilterCriteria filterCriteria, Pageable pageReq) {
-        List<ToDo> allToDos = toDoInMemoRepository.findAllByCriteria(filterCriteria);
+        List<ToDo> allToDos = new ArrayList<>(toDoInMemoRepository.findAllByCriteria(filterCriteria));
 
         // sort if necessary
         if (pageReq.getSort() != null) {
