@@ -108,13 +108,6 @@ public class ToDoController {
         return ResponseEntity.ok(updatedToDo);
     }
 
-    @GetMapping("/todos/metrics")
-    public ResponseEntity<?> getMetrics() {
-        Map<String, Double> metrics = toDoService.getMetrics();
-
-        return ResponseEntity.ok(metrics);
-    }
-
     @PutMapping("/todos/{id}/undone")
     public ResponseEntity<ToDo> markAsNotDone(@PathVariable int id) {
         ToDo updatedToDo = toDoService.updateToDoDoneStatus(id, Status.NOT_DONE);
@@ -132,6 +125,13 @@ public class ToDoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/todos/metrics")
+    public ResponseEntity<?> getMetrics() {
+        Map<String, Double> metrics = toDoService.getMetrics();
+
+        return ResponseEntity.ok(metrics);
     }
 
     // EXCEPTION HANDLERS
