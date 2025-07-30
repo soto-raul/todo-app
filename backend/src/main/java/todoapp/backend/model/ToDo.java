@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
@@ -36,6 +37,8 @@ public class ToDo {
     private Status isDone;
 
     @JsonProperty("doneDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+
     @Getter
     private LocalDateTime doneDate; // Nullable
 
@@ -45,6 +48,7 @@ public class ToDo {
     private Priority priority;
 
     @JsonProperty("creationDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     @Getter
     private LocalDateTime creationDate;
 
