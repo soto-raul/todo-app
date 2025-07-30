@@ -9,7 +9,9 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import todoapp.backend.enums.Priority;
 import todoapp.backend.enums.Status;
@@ -174,5 +177,243 @@ public class ToDoServiceTest {
         when(toDoRepository.delete(10)).thenReturn(false);
 
         assertThrows(ToDoNotFoundException.class, () -> toDoService.deleteToDo(10));
+    }
+
+    @Test
+    @DisplayName("Test for getAllToDos() when sorting by priority ASC")
+    void testGetAllToDosSortedByPriorityAsc() {
+        List<ToDo> toDosReturned = List.of(toDo1, toDo2, toDo3);
+        when(toDoRepository.findAll()).thenReturn(new ArrayList<>(toDosReturned));
+
+        // make request to get To Dos sorted
+        Pageable pageReq = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "priority"));
+        List<ToDo> allToDos = toDoService.getAllToDos(pageReq).getContent();
+
+        // assertions
+        assertNotNull(allToDos);
+        assertEquals(allToDos.size(), 3);
+        assertEquals(allToDos, List.of(toDo2, toDo3, toDo1));
+    }
+
+    @Test
+    @DisplayName("Test for getAllToDos() when sorting by priority DESC")
+    void testGetAllToDosSortedByPriorityDesc() {
+        List<ToDo> toDosReturned = List.of(toDo1, toDo2, toDo3);
+        when(toDoRepository.findAll()).thenReturn(new ArrayList<>(toDosReturned));
+
+        // make request to get To Dos sorted
+        Pageable pageReq = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "priority"));
+        List<ToDo> allToDos = toDoService.getAllToDos(pageReq).getContent();
+
+        // assertions
+        assertNotNull(allToDos);
+        assertEquals(allToDos.size(), 3);
+        assertEquals(allToDos, List.of(toDo1, toDo3, toDo2));
+    }
+
+    @Test
+    @DisplayName("Test for getAllToDos() when sorting by due date ASC")
+    void testGetAllToDosSortedByDueDateAsc() {
+        List<ToDo> toDosReturned = List.of(toDo1, toDo2, toDo3);
+        when(toDoRepository.findAll()).thenReturn(new ArrayList<>(toDosReturned));
+
+        // make request to get To Dos sorted
+        Pageable pageReq = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "dueDate"));
+        List<ToDo> allToDos = toDoService.getAllToDos(pageReq).getContent();
+
+        // assertions
+        assertNotNull(allToDos);
+        assertEquals(allToDos.size(), 3);
+        assertEquals(allToDos, List.of(toDo3, toDo1, toDo2));
+    }
+
+    @Test
+    @DisplayName("Test for getAllToDos() when sorting by due date DESC")
+    void testGetAllToDosSortedByDueDateDesc() {
+        List<ToDo> toDosReturned = List.of(toDo1, toDo2, toDo3);
+        when(toDoRepository.findAll()).thenReturn(new ArrayList<>(toDosReturned));
+
+        // make request to get To Dos sorted
+        Pageable pageReq = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "dueDate"));
+        List<ToDo> allToDos = toDoService.getAllToDos(pageReq).getContent();
+
+        // assertions
+        assertNotNull(allToDos);
+        assertEquals(allToDos.size(), 3);
+        assertEquals(allToDos, List.of(toDo2, toDo1, toDo3));
+    }
+
+    @Test
+    @DisplayName("Test for getAllToDos() when sorting by priority and due date, both ASC")
+    void testGetAllToDosSortedByPriorityAndDueDateAsc() {
+        ToDo extraToDo = new ToDo(4, "Extra sample To Do", null, Priority.MEDIUM);
+        List<ToDo> toDosReturned = List.of(toDo1, toDo2, toDo3, extraToDo);
+        when(toDoRepository.findAll()).thenReturn(new ArrayList<>(toDosReturned));
+
+        // setup sort orders
+        List<Sort.Order> sortOrders = new ArrayList<>();
+        sortOrders.add(new Sort.Order(Sort.Direction.ASC, "priority"));
+        sortOrders.add(new Sort.Order(Sort.Direction.ASC, "dueDate"));
+
+        // make request to get To Dos sorted
+        Pageable pageReq = PageRequest.of(0, 10, Sort.by(sortOrders));
+        List<ToDo> allToDos = toDoService.getAllToDos(pageReq).getContent();
+
+        // assertions
+        assertNotNull(allToDos);
+        assertEquals(allToDos.size(), 4);
+        assertEquals(allToDos, List.of(toDo2, toDo3, extraToDo, toDo1));
+    }
+
+    @Test
+    @DisplayName("Test for getAllToDos() when sorting by priority and due date, both DESC")
+    void testGetAllToDosSortedByPriorityAndDueDateDesc() {
+        ToDo extraToDo = new ToDo(4, "Extra sample To Do", null, Priority.MEDIUM);
+        List<ToDo> toDosReturned = List.of(toDo1, toDo2, toDo3, extraToDo);
+        when(toDoRepository.findAll()).thenReturn(new ArrayList<>(toDosReturned));
+
+        // setup sort orders
+        List<Sort.Order> sortOrders = new ArrayList<>();
+        sortOrders.add(new Sort.Order(Sort.Direction.DESC, "priority"));
+        sortOrders.add(new Sort.Order(Sort.Direction.DESC, "dueDate"));
+
+        // make request to get To Dos sorted
+        Pageable pageReq = PageRequest.of(0, 10, Sort.by(sortOrders));
+        List<ToDo> allToDos = toDoService.getAllToDos(pageReq).getContent();
+
+        // assertions
+        assertNotNull(allToDos);
+        assertEquals(allToDos.size(), 4);
+        assertEquals(allToDos, List.of(toDo1, extraToDo, toDo3, toDo2));
+    }
+
+    @Test
+    @DisplayName("Test for getAllToDos() when sorting by priority ASC and due date DESC")
+    void testGetAllToDosSortedByPriorityAscAndDueDateDesc() {
+        ToDo extraToDo = new ToDo(4, "Extra sample To Do", null, Priority.MEDIUM);
+        List<ToDo> toDosReturned = List.of(toDo1, toDo2, toDo3, extraToDo);
+        when(toDoRepository.findAll()).thenReturn(new ArrayList<>(toDosReturned));
+
+        // setup sort orders
+        List<Sort.Order> sortOrders = new ArrayList<>();
+        sortOrders.add(new Sort.Order(Sort.Direction.ASC, "priority"));
+        sortOrders.add(new Sort.Order(Sort.Direction.DESC, "dueDate"));
+
+        // make request to get To Dos sorted
+        Pageable pageReq = PageRequest.of(0, 10, Sort.by(sortOrders));
+        List<ToDo> allToDos = toDoService.getAllToDos(pageReq).getContent();
+
+        // assertions
+        assertNotNull(allToDos);
+        assertEquals(allToDos.size(), 4);
+        assertEquals(allToDos, List.of(toDo2, extraToDo, toDo3, toDo1));
+    }
+
+    @Test
+    @DisplayName("Test for getAllToDos() when sorting by priority DESC and due date ASC")
+    void testGetAllToDosSortedByPriorityDescAndDueDateAsc() {
+        ToDo extraToDo = new ToDo(4, "Extra sample To Do", null, Priority.MEDIUM);
+        List<ToDo> toDosReturned = List.of(toDo1, toDo2, toDo3, extraToDo);
+        when(toDoRepository.findAll()).thenReturn(new ArrayList<>(toDosReturned));
+
+        // setup sort orders
+        List<Sort.Order> sortOrders = new ArrayList<>();
+        sortOrders.add(new Sort.Order(Sort.Direction.DESC, "priority"));
+        sortOrders.add(new Sort.Order(Sort.Direction.ASC, "dueDate"));
+
+        // make request to get To Dos sorted
+        Pageable pageReq = PageRequest.of(0, 10, Sort.by(sortOrders));
+        List<ToDo> allToDos = toDoService.getAllToDos(pageReq).getContent();
+
+        // assertions
+        assertNotNull(allToDos);
+        assertEquals(allToDos.size(), 4);
+        assertEquals(allToDos, List.of(toDo1, toDo3, extraToDo, toDo2));
+    }
+
+    @Test
+    @DisplayName("Test for getMetrics() when no To Dos are marked as DONE")
+    void testGetMetricsWhenNoToDosAreDone() {
+        toDo3.setIsDone(Status.NOT_DONE); // mark the sample ToDo as NOT_DONE
+
+        when(toDoRepository.findAll()).thenReturn(List.of(toDo1, toDo2, toDo3));
+
+        // call service method to get metrics
+        Map<String, Double> metrics = toDoService.getMetrics();
+
+        // assertions
+        assertEquals(metrics.size(), 1); // metrics map only has 1 key
+        assertTrue(metrics.containsKey("ALL")); // its only key is ALL
+        assertEquals(metrics.get("ALL"), 0.0);
+    }
+
+    @Test
+    @DisplayName("Test for getMetrics() when at least 1 To Do per priority is marked as DONE")
+    void testGetMetricsWhenAtLeastOneToDoPerPriorityIsDone() {
+        // mark each To Do per priority as DONE
+        toDo1.setIsDone(Status.DONE);
+        toDo2.setIsDone(Status.DONE);
+
+        when(toDoRepository.findAll()).thenReturn(List.of(toDo1, toDo2, toDo3));
+
+        // call service method to get metrics
+        Map<String, Double> metrics = toDoService.getMetrics();
+
+        // assertions
+        assertEquals(metrics.size(), 4); // metrics map only has 4 keys
+        assertTrue(metrics.containsKey("ALL"));
+        assertTrue(metrics.containsKey("HIGH"));
+        assertTrue(metrics.containsKey("MEDIUM"));
+        assertTrue(metrics.containsKey("LOW"));
+    }
+
+    @Test
+    @DisplayName("Test for getMetrics() when only HIGH priority To Dos are marked as DONE")
+    void testGetMetricsWhenOnlyHighPriorityAreDone() {
+        // mark only HIGH priority To Do as DONE
+        toDo1.setIsDone(Status.DONE);
+        toDo3.setIsDone(Status.NOT_DONE);
+
+        when(toDoRepository.findAll()).thenReturn(List.of(toDo1, toDo2, toDo3));
+
+        // call service method to get metrics
+        Map<String, Double> metrics = toDoService.getMetrics();
+
+        // assertions
+        assertEquals(metrics.size(), 2); // metrics map only has 2 keys
+        assertTrue(metrics.containsKey("ALL"));
+        assertTrue(metrics.containsKey("HIGH"));
+    }
+
+    @Test
+    @DisplayName("Test for getMetrics() when only MEDIUM priority To Dos are marked as DONE")
+    void testGetMetricsWhenOnlyMediumPriorityAreDone() {
+        when(toDoRepository.findAll()).thenReturn(List.of(toDo1, toDo2, toDo3));
+
+        // call service method to get metrics
+        Map<String, Double> metrics = toDoService.getMetrics();
+
+        // assertions
+        assertEquals(metrics.size(), 2); // metrics map only has 2 keys
+        assertTrue(metrics.containsKey("ALL"));
+        assertTrue(metrics.containsKey("MEDIUM"));
+    }
+
+    @Test
+    @DisplayName("Test for getMetrics() when only LOW priority To Dos are marked as DONE")
+    void testGetMetricsWhenOnlyLowPriorityAreDone() {
+        // mark only LOW priority To Dos as DONE
+        toDo2.setIsDone(Status.DONE);
+        toDo3.setIsDone(Status.NOT_DONE);
+
+        when(toDoRepository.findAll()).thenReturn(List.of(toDo1, toDo2, toDo3));
+
+        // call service method to get metrics
+        Map<String, Double> metrics = toDoService.getMetrics();
+
+        // assertions
+        assertEquals(metrics.size(), 2); // metrics map only has 2 keys
+        assertTrue(metrics.containsKey("ALL"));
+        assertTrue(metrics.containsKey("LOW"));
     }
 }
