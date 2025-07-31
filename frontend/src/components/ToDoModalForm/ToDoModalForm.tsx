@@ -74,9 +74,10 @@ const ToDoForm = ({
         onClick={(e) => {
           e.stopPropagation();
         }}
+        data-testid="modal-form-container"
       >
         <h2>To Do Task Data</h2>
-        <form noValidate>
+        <form noValidate data-testid="todo-form">
           <div className="input-field">
             <label htmlFor="name">Name</label>
             <input
@@ -93,9 +94,10 @@ const ToDoForm = ({
                 });
                 setNameIsValid(isNameValid(e.target.value));
               }}
+              data-testid="name-form-input"
             />
             {!nameIsValid && (
-              <p className="error-msg">
+              <p className="error-msg" data-testid="form-error-msg">
                 Invalid name input. Name cannot be empty and must contain a
                 maximum of 120 characters.
               </p>
@@ -113,6 +115,7 @@ const ToDoForm = ({
                   [e.target.name]: e.target.value,
                 });
               }}
+              data-testid="priority-form-input"
             >
               <option value="HIGH">High</option>
               <option value="MEDIUM">Medium</option>
@@ -133,16 +136,18 @@ const ToDoForm = ({
                   [e.target.name]: e.target.value,
                 });
               }}
+              data-testid="due-date-form-input"
             />
           </div>
           <div className="form-actions">
-            <button type="button" onClick={onCancel}>
+            <button type="button" onClick={onCancel} data-testid="cancel-btn">
               Cancel
             </button>
             <button
               type="submit"
               onClick={handleSubmit}
               disabled={!nameIsValid}
+              data-testid="submit-form-btn"
             >
               Save
             </button>

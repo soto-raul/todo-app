@@ -5,7 +5,13 @@ const MetricsDashboard = ({
 }: {
   metricsData: Map<string, number>;
 }) => {
+  // default value to display
+  const defaultDisplayValue = "--:--:--";
+
   const convertSecondsToHHMMSS = (timeInSeconds: number) => {
+    if (timeInSeconds === 0) {
+      return defaultDisplayValue;
+    }
     const hours = Math.floor(timeInSeconds / 3600);
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
     const seconds = Math.round(timeInSeconds % 60);
@@ -16,35 +22,35 @@ const MetricsDashboard = ({
   };
 
   return (
-    <section>
+    <section data-testid="metrics-component">
       <div className="metrics-container">
         <div>
           <h3>Average time to complete all tasks:</h3>
-          <p>
+          <p data-testid="all-todos-avg">
             {metricsData.has("ALL")
-              ? convertSecondsToHHMMSS(metricsData.get("ALL")!!)
-              : "--:--:--"}
+              ? convertSecondsToHHMMSS(metricsData.get("ALL")!)
+              : defaultDisplayValue}
           </p>
         </div>
         <div>
           <h3>Average time to complete all tasks by priority:</h3>
-          <p>
+          <p data-testid="high-avg">
             <b>HIGH: </b>
             {metricsData.has("HIGH")
-              ? convertSecondsToHHMMSS(metricsData.get("HIGH")!!)
-              : "--:--:--"}
+              ? convertSecondsToHHMMSS(metricsData.get("HIGH")!)
+              : defaultDisplayValue}
           </p>
-          <p>
+          <p data-testid="medium-avg">
             <b>MEDIUM: </b>
             {metricsData.has("MEDIUM")
-              ? convertSecondsToHHMMSS(metricsData.get("MEDIUM")!!)
-              : "--:--:--"}
+              ? convertSecondsToHHMMSS(metricsData.get("MEDIUM")!)
+              : defaultDisplayValue}
           </p>
-          <p>
+          <p data-testid="low-avg">
             <b>LOW: </b>
             {metricsData.has("LOW")
-              ? convertSecondsToHHMMSS(metricsData.get("LOW")!!)
-              : "--:--:--"}
+              ? convertSecondsToHHMMSS(metricsData.get("LOW")!)
+              : defaultDisplayValue}
           </p>
         </div>
       </div>
