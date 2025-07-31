@@ -28,7 +28,7 @@ const FilterControls = ({
     });
   };
   return (
-    <section>
+    <section data-testid="filter-controls-component">
       <div className="main-controls-container">
         <div className="control">
           <label htmlFor="name">Name</label>
@@ -39,6 +39,7 @@ const FilterControls = ({
             placeholder="Enter To Do task name..."
             maxLength={120}
             onChange={(e) => setNameFilter(e.target.value)}
+            data-testid="name-filter-input"
           />
         </div>
         <div className="control">
@@ -47,6 +48,7 @@ const FilterControls = ({
             name="priority"
             id="priority"
             onChange={(e) => setPriorityFilter(e.target.value)}
+            data-testid="priority-filter-input"
           >
             <option value="ALL">All</option>
             <option value="HIGH">High</option>
@@ -60,13 +62,18 @@ const FilterControls = ({
             name="status"
             id="status"
             onChange={(e) => setDoneStatusFilter(e.target.value)}
+            data-testid="status-filter-input"
           >
             <option value="ALL">All</option>
             <option value="DONE">Done</option>
             <option value="NOT_DONE">Not Done</option>
           </select>
         </div>
-        <button type="submit" onClick={handleSearchClick}>
+        <button
+          type="submit"
+          onClick={handleSearchClick}
+          data-testid="search-button"
+        >
           Search
         </button>
       </div>

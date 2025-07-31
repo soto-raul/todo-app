@@ -30,7 +30,7 @@ const ToDoList = ({
 
   if (toDos.length === 0) {
     return (
-      <section>
+      <section data-testid="todo-list-component">
         <div>
           <table>
             <thead>
@@ -43,7 +43,9 @@ const ToDoList = ({
               </tr>
             </thead>
           </table>
-          <div className="no-todos-msg">No To Do tasks were found</div>
+          <div className="no-todos-msg" data-testid="no-todos-msg">
+            No To Do tasks were found
+          </div>
         </div>
       </section>
     );
@@ -76,9 +78,9 @@ const ToDoList = ({
               <th className="actions-col"></th>
             </tr>
           </thead>
-          <tbody>
-            {toDos.map((toDo: ToDo, index: number) => (
-              <tr key={index}>
+          <tbody data-testid="table-body">
+            {toDos.map((toDo: ToDo) => (
+              <tr key={toDo.id}>
                 <td className="done-checkbox">
                   <input
                     type="checkbox"

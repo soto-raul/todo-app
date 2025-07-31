@@ -9,8 +9,8 @@ const Paginator = ({
   onPageChange: (targetPage: number) => void;
 }) => {
   return (
-    <section>
-      <div className="paginator">
+    <section data-testid="paginator-component">
+      <div className="paginator" data-testid="paginator">
         {/* go to first page */}
         <div
           className="paginator-item"
@@ -19,6 +19,7 @@ const Paginator = ({
               onPageChange(0);
             }
           }}
+          data-testid="go-to-first"
         >
           «
         </div>
@@ -31,12 +32,13 @@ const Paginator = ({
               onPageChange(pagination.currentPage - 1);
             }
           }}
+          data-testid="go-to-prev"
         >
           &#8249;
         </div>
 
         {/* show current page */}
-        <div className="paginator-item page-num">
+        <div className="paginator-item page-num" data-testid="page-number">
           {pagination.currentPage + 1}
         </div>
 
@@ -48,6 +50,7 @@ const Paginator = ({
               onPageChange(pagination.currentPage + 1);
             }
           }}
+          data-testid="go-to-next"
         >
           &#8250;
         </div>
@@ -60,6 +63,7 @@ const Paginator = ({
               onPageChange(pagination.totalPages - 1);
             }
           }}
+          data-testid="go-to-last"
         >
           »
         </div>
