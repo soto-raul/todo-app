@@ -24,7 +24,7 @@ const mockedAxios = vi.mocked(axios, true);
 const mockImplementations = {
   get: () =>
     mockedAxios.get.mockImplementationOnce((url) => {
-      if (url.includes("todos")) {
+      if (url.endsWith("todos")) {
         return Promise.resolve({
           data: {
             content: mockToDos,
