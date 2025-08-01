@@ -39,7 +39,7 @@ const Paginator = ({
 
         {/* show current page */}
         <div className="paginator-item page-num" data-testid="page-number">
-          {pagination.currentPage + 1}
+          {pagination.currentPage + 1} / {pagination.totalPages}
         </div>
 
         {/* go to next page */}

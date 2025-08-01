@@ -77,15 +77,16 @@ function App() {
 
     getAllToDos(filters, currPage, paginationData.size, sortBy, order)
       .then((response) => {
+        setToDoList(response?.data.content);
+
         setPaginationData({
           currentPage: response?.data.number,
           size: response?.data.size,
-          totalPages: response?.data.totalPages,
+          totalPages:
+            response?.data.totalPages === 0 ? 1 : response?.data.totalPages,
           first: response?.data.first,
           last: response?.data.last,
         });
-
-        setToDoList(response?.data.content);
       })
       .catch((error) => {
         console.error(error);
