@@ -1,0 +1,14 @@
+.metrics-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 97%;
+  border: 1px solid #f9f9f9;
+  padding: 1rem;
+  gap: 1rem;
+  justify-content: space-evenly;
+}
+
+.metrics-container > div {
+  width: 40%;
+}

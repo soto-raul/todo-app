@@ -1,0 +1,98 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+
+  color-scheme: light dark;
+  color: #f9f9f9;
+  background-color: #242424;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+}
+
+main {
+  margin: 1rem 2rem;
+  width: 90%;
+  place-items: center;
+}
+
+section {
+  width: 80%;
+  padding: 1rem;
+}
+
+h1 {
+  font-size: 4rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin-top: 0;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid #f9f9f9;
+  background-color: transparent;
+  color: #f9f9f9;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button[type="submit"] {
+  background-color: #f9f9f9;
+  color: #242424;
+}
+
+button[type="submit"]:disabled {
+  color: lightgray;
+  background-color: grey;
+  border-color: grey;
+  cursor: not-allowed;
+}
+
+button:hover {
+  background-color: darkgray;
+}
+
+input,
+select {
+  font-size: 1rem;
+  padding: 0.2rem;
+}
+
+label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  width: 80px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #242424;
+    background-color: #f9f9f9;
+  }
+
+  button {
+    color: #242424;
+  }
+
+  button[type="submit"] {
+    background-color: #242424;
+    color: #f9f9f9;
+  }
+}

@@ -1,0 +1,90 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr {
+  border: 1px solid #f9f9f9;
+}
+
+th {
+  font-size: 1.1rem;
+  border: 1px solid #f9f9f9;
+  background-color: #f9f9f9;
+  color: black;
+  text-align: left;
+}
+
+th,
+td {
+  padding: 0.5rem;
+}
+
+.no-todos-msg {
+  width: 100%;
+  padding: 2rem 0;
+  font-size: 1.2rem;
+  font-weight: 300;
+  font-style: italic;
+  text-align: center;
+  color: lightgray;
+}
+
+.done-col {
+  width: 5%;
+}
+
+.name-col {
+  width: 40%;
+}
+
+.priority-col {
+  width: 15%;
+}
+
+.due-date-col {
+  width: 20%;
+}
+
+.actions-col {
+  width: 20%;
+}
+
+input[type="checkbox"] {
+  height: 16px;
+  width: 16px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.done-checkbox {
+  text-align: center;
+}
+
+.edit-btn {
+  background-color: #e9c601;
+}
+
+.delete-btn {
+  background-color: #cb0404;
+}
+
+.edit-btn,
+.delete-btn {
+  border: none;
+  font-size: 0.9rem;
+}
+
+.task-done {
+  text-decoration: line-through;
+  color: grey;
+}
+
+.task-not-done {
+  font-weight: 500;
+}
