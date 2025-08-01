@@ -202,13 +202,14 @@ function App() {
   return (
     <>
       <main>
-        <h1>ToDo App</h1>
+        <h1>To Do List App</h1>
         <FilterControls setFilters={setFilters} />
         <section>
           <button
             onClick={() => {
               handleOpenFormModal(null);
             }}
+            data-testid="add-todo-btn"
           >
             + New Task
           </button>
